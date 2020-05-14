@@ -43,21 +43,4 @@ const order = new Schema({
   },
 });
 
-// cart: {
-//   addedItems: [
-//     {
-//       count: {
-// type: Number,
-// required: true,
-// default: 1,
-//       },
-// itemId: {
-//   type: Schema.Types.ObjectId,
-//   ref: 'Course',
-//   required: true,
-// },
-//     },
-//   ],
-// },
-
 module.exports = model('Order', order);

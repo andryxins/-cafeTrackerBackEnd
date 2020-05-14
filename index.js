@@ -1,13 +1,8 @@
-//pass for Mongo lLXD7hTlxIiPti3b
-
-// mongodb+srv://andryxins:lLXD7hTlxIiPti3b@cafetrackerdata-dshq5.mongodb.net/test?retryWrites=true&w=majority
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const OrdersRoutes = require('./Routes/OrderRoutes');
 const DishesRoutes = require('./Routes/DishesRoutes');
-// const Order = require('./models/order');
 
 const server = express();
 
@@ -41,5 +36,3 @@ const start = async () => {
 };
 
 start();
-
-///////
