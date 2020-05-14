@@ -8,9 +8,20 @@ const order = new Schema({
     type: String,
     required: true,
   },
-  dishes: {
-    type: Array,
-  },
+  dishes: [
+    {
+      count: {
+        type: Number,
+        required: true,
+        default: 1,
+      },
+      dish: {
+        type: Schema.Types.ObjectId,
+        ref: 'dish',
+        required: true,
+      },
+    },
+  ],
   guests: {
     type: String,
     required: true,
@@ -31,5 +42,22 @@ const order = new Schema({
     required: true,
   },
 });
+
+// cart: {
+//   addedItems: [
+//     {
+//       count: {
+// type: Number,
+// required: true,
+// default: 1,
+//       },
+// itemId: {
+//   type: Schema.Types.ObjectId,
+//   ref: 'Course',
+//   required: true,
+// },
+//     },
+//   ],
+// },
 
 module.exports = model('Order', order);
