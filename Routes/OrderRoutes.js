@@ -17,11 +17,14 @@ router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (id.length < 24) return res.sendStatus(400);
+    if (id.length !== 24) return res.sendStatus(400);
 
-    const targetOrder = await Order.findOne({ _id: id }).populate(
-      'dishes.dish',
-    );
+    const targetOrder = await Order.findOne({ _id: id }, err => {
+      if (err) {
+        console.log(`request failure with error '${err.message}'`);
+        return res.send(err.message);
+      }
+    }).populate('dishes.dish');
 
     if (targetOrder) {
       res.send(targetOrder);
@@ -39,13 +42,21 @@ router.post('/add', async (req, res) => {
     const { body } = req;
     const order = new Order({ ...body });
 
-    await order.save(null, (err, content) => {
+    await order.save(null, async (err, content) => {
       if (err) {
-        console.log(err);
-        return res.sendStatus(500);
+        console.log(`request failure with error '${err.message}'`);
+        return res.send(err.message);
       }
 
-      return res.sendStatus(201);
+      await Order.findOne({ _id: content._id }, err => {
+        if (err) {
+          console.log(`request failure with error '${err.message}'`);
+          return res.send(err.message);
+        }
+      })
+        .populate('dishes.dish')
+        .then(populatedOrder => res.send(populatedOrder))
+        .catch(err => res.send(err));
     });
   } catch (e) {
     console.log(e);
@@ -58,13 +69,20 @@ router.patch('/edit/:id', async (req, res) => {
     const { id } = req.params;
     const { body } = req;
 
-    const targetOrder = await Order.findOneAndUpdate({ _id: id }, { ...body });
+    await Order.findOneAndUpdate(
+      { _id: id },
+      { ...body },
+      { new: true, populate: 'dishes.dish' },
+      (err, content) => {
+        if (err) return res.send(err.message);
 
-    if (targetOrder) {
-      res.sendStatus(200);
-    } else {
-      res.sendStatus(404);
-    }
+        if (content) {
+          res.send(content);
+        } else {
+          res.sendStatus(404);
+        }
+      },
+    );
   } catch (e) {
     console.log(e);
     res.sendStatus(500);
@@ -74,14 +92,18 @@ router.patch('/edit/:id', async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    if (id.length < 24) return res.sendStatus(400);
-    const targetOrder = await Order.findOneAndDelete({ _id: id });
+    if (id.length !== 24) return res.sendStatus(400);
+    await Order.findOneAndDelete({ _id: id }, (err, content) => {
+      if (err) {
+        res.send(err.message);
+      }
 
-    if (targetOrder) {
-      return res.sendStatus(200);
-    } else {
-      return res.sendStatus(404);
-    }
+      if (content) {
+        return res.sendStatus(200);
+      } else {
+        return res.sendStatus(404);
+      }
+    });
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);

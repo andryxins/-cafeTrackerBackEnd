@@ -19,13 +19,18 @@ router.get('/:id', async (req, res) => {
 
     if (id.length < 24) return res.sendStatus(400);
 
-    const targetDish = await Dish.findOne({ _id: id });
+    await Dish.findOne({ _id: id }, (err, content) => {
+      if (err) {
+        console.log(`request failure with error '${err.message}'`);
+        return res.send(err.message);
+      }
 
-    if (targetDish) {
-      return res.send(targetDish);
-    } else {
-      return res.sendStatus(404);
-    }
+      if (content) {
+        res.send(content);
+      } else {
+        res.sendStatus(404);
+      }
+    });
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
@@ -43,7 +48,7 @@ router.post('/add', async (req, res) => {
         return res.sendStatus(500);
       }
 
-      return res.sendStatus(201);
+      return res.send(content);
     });
   } catch (e) {
     console.log(e);
@@ -59,13 +64,22 @@ router.patch('/edit/:id', async (req, res) => {
 
     const { body } = req;
 
-    const targetDish = await Dish.findOneAndUpdate({ _id: id }, { ...body });
+    await Dish.findOneAndUpdate(
+      { _id: id },
+      { ...body },
+      { new: true },
+      (err, content) => {
+        if (err) {
+          return res.send(err);
+        }
 
-    if (targetDish) {
-      return res.sendStatus(200);
-    } else {
-      return res.sendStatus(404);
-    }
+        if (content) {
+          return res.send(content);
+        } else {
+          return res.sendStatus(404);
+        }
+      },
+    );
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
@@ -76,13 +90,17 @@ router.delete('/delete/:id', async (req, res) => {
   try {
     const { id } = req.params;
     if (id.length < 24) return res.sendStatus(400);
-    const targetDish = await Dish.findOneAndDelete({ _id: id });
+    await Dish.findOneAndDelete({ _id: id }, (err, content) => {
+      if (err) {
+        res.send(err.message);
+      }
 
-    if (targetDish) {
-      return res.sendStatus(200);
-    } else {
-      return res.sendStatus(404);
-    }
+      if (content) {
+        return res.sendStatus(200);
+      } else {
+        return res.sendStatus(404);
+      }
+    });
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
