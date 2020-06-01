@@ -41,6 +41,10 @@ const order = new Schema({
     type: String,
     required: true,
   },
+  userAdded: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
 });
 
 module.exports = model('Order', order);
