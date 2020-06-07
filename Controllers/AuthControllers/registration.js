@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const User = require('../../models/user.js');
+const errorHandler = require('../../utils/errorHandler');
 
 module.exports = async (req, res) => {
   try {
@@ -28,7 +29,6 @@ module.exports = async (req, res) => {
       return res.sendStatus(201);
     });
   } catch (e) {
-    console.log(e);
-    return res.sendStatus(500);
+    errorHandler(res, e);
   }
 };

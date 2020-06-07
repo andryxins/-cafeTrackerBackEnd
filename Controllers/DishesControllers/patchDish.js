@@ -1,22 +1,27 @@
-const Order = require('../../models/order');
+const Dish = require('../../models/dish');
 const errorHandler = require('../../utils/errorHandler');
 
 module.exports = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (id.length < 24) return res.sendStatus(400);
+
     const { body } = req;
 
-    await Order.findOneAndUpdate(
+    await Dish.findOneAndUpdate(
       { _id: id },
       { ...body },
-      { new: true, populate: 'dishes.dish' },
+      { new: true },
       (err, content) => {
-        if (err) return res.send(err.message);
+        if (err) {
+          return res.send(err);
+        }
 
         if (content) {
-          res.send(content);
+          return res.send(content);
         } else {
-          res.sendStatus(404);
+          return res.sendStatus(404);
         }
       },
     );

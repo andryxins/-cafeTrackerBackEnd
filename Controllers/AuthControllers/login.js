@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwtKey = require('../../config/keys').jwt;
 const User = require('../../models/user.js');
+const errorHandler = require('../../utils/errorHandler');
 
 module.exports = async (req, res) => {
   try {
@@ -36,7 +37,6 @@ module.exports = async (req, res) => {
       return res.status(404).send('user is not exist');
     }
   } catch (e) {
-    console.log(e);
-    return res.sendStatus(500);
+    errorHandler(res, e);
   }
 };

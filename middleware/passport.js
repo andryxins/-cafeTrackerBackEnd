@@ -6,6 +6,7 @@ const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: jwtKey,
 };
+const errorHandler = require('../utils/errorHandler');
 
 module.exports = passport =>
   passport.use(
@@ -19,8 +20,7 @@ module.exports = passport =>
           return done(null, false);
         }
       } catch (e) {
-        console.log(e);
-        return done(null, false);
+        errorHandler(res, e);
       }
     }),
   );

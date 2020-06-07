@@ -1,4 +1,5 @@
 const Order = require('../../models/order');
+const errorHandler = require('../../utils/errorHandler');
 
 module.exports = async (req, res) => {
   try {
@@ -22,7 +23,6 @@ module.exports = async (req, res) => {
         .catch(err => res.status(500).send(err));
     });
   } catch (e) {
-    console.log(e);
-    return res.status(500).send(e);
+    errorHandler(res, e);
   }
 };
