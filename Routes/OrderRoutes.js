@@ -13,12 +13,28 @@ router.get(
   async (req, res) => getAllOrders(req, res),
 );
 
-router.get('/:id', async (req, res) => getOrderWithId(req, res));
+router.get(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => getOrderWithId(req, res),
+);
 
-router.post('/add', async (req, res) => postNewOrder(req, res));
+router.post(
+  '/add',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => postNewOrder(req, res),
+);
 
-router.patch('/edit/:id', async (req, res) => patchOrder(req, res));
+router.patch(
+  '/edit/:id',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => patchOrder(req, res),
+);
 
-router.delete('/delete/:id', async (req, res) => deleteOrder(req, res));
+router.delete(
+  '/delete/:id',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => deleteOrder(req, res),
+);
 
 module.exports = router;

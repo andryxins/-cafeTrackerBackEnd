@@ -9,6 +9,11 @@ const user = new Schema({
     type: String,
     reqired: true,
   },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
 });
 
 module.exports = model('user', user);

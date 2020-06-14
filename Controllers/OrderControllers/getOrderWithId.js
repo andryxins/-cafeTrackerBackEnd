@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
         console.log(`request failure with error '${err.message}'`);
         return res.send(err.message);
       }
-    }).populate('dishes.dish');
+    }).populate('dishes.dish userAdded');
 
     if (targetOrder) {
       res.send(targetOrder);

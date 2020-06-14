@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
           token: `Bearer ${token}`,
         });
       } else {
-        return res.status(401).send('passwords is not equal');
+        return res.status(401).send('wrong password');
       }
     } else {
       return res.status(404).send('user is not exist');

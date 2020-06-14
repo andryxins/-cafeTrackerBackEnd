@@ -1,10 +1,12 @@
 const Order = require('../../models/order');
 const errorHandler = require('../../utils/errorHandler');
+const getDataFromToken = require('../../utils/getDataFromToken');
 
 module.exports = async (req, res) => {
   try {
     const { body } = req;
-    const order = new Order({ ...body });
+    const reqUser = getDataFromToken(req, res);
+    const order = new Order({ ...body, userAdded: reqUser.userId });
 
     await order.save(null, async (err, content) => {
       if (err) {
@@ -18,7 +20,7 @@ module.exports = async (req, res) => {
           return res.status(500).send(err.message);
         }
       })
-        .populate('dishes.dish')
+        .populate('dishes.dish userAdded')
         .then(populatedOrder => res.status(201).send(populatedOrder))
         .catch(err => res.status(500).send(err));
     });

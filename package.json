@@ -24,7 +24,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.13",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "password-validator": "^5.0.3"
   },
   "engines": {
     "node": "13.x"

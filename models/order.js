@@ -44,6 +44,11 @@ const order = new Schema({
   userAdded: {
     type: Schema.Types.ObjectId,
     ref: 'user',
+    required: true,
+  },
+  lastUpdateBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
   },
 });
 

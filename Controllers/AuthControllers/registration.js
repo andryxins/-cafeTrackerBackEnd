@@ -1,10 +1,17 @@
 const bcrypt = require('bcryptjs');
 const User = require('../../models/user.js');
+const passwordValidation = require('../../utils/passwordValidation');
 const errorHandler = require('../../utils/errorHandler');
 
 module.exports = async (req, res) => {
   try {
     const { login, password } = req.body;
+
+    if (!passwordValidation(password)) {
+      return res.status(403).json({
+        message: 'not valid password',
+      });
+    }
 
     const candidate = await User.findOne({ login: login }, err => {
       if (err) {
