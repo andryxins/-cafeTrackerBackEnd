@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const jwtKey = require('../config/keys').jwt;
+const jwtKey = process.env.JWT
 const errorHandler = require('./errorHandler');
 
 module.exports = (req, res) => {

@@ -1,8 +1,9 @@
+require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const mongoUri = require('./config/keys').mongoUri;
+const mongoUri = process.env.MONGO_URI
 const OrdersRoutes = require('./Routes/OrderRoutes');
 const DishesRoutes = require('./Routes/DishesRoutes');
 const AuthRoutes = require('./Routes/AuthRoutes');
